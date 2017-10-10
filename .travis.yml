@@ -10,7 +10,4 @@ env:
     matrix:
         - ARCH=-amd64 DOTARCH=.amd64
         - ARCH=-arm DOTARCH=.arm
-script: 
-    - make fetch
-    - make build
-    - make push
+script: make
