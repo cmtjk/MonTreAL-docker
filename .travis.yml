@@ -7,7 +7,6 @@ env:
         - NAME=montreal
         - REPO_URL="https://github.com/r3r57/MonTreAL.git"
         - VERSION=latest
-        - TMP_DIR=/tmp/montreal
     matrix:
         - ARCH=-amd64 DOTARCH=.amd64
         - ARCH=-arm DOTARCH=.arm

@@ -1,7 +1,6 @@
 #Needs the following environment variables:
-#	NAME - the application name
+#	NAME - the application name in lowercase
 #	REPO_URL - MonTreAL's Repository
-#	TMP_DIR - where MonTreAL is fetched
 #	ARCH - the architecture type, e.g '-amd64'
 #	DOTARCH - the architecture type with leading dot, e.g '.amd64'
 #	VERSION - the version
@@ -11,6 +10,8 @@
 
 default: all
 all: push
+
+TMP_DIR:=/tmp/${NAME}
 
 fetch: clean
 	git clone ${REPO_URL} ${TMP_DIR}
