@@ -25,5 +25,5 @@ push: build
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	docker push "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
 
-clean: 
+clean:
 	rm -rf ${TMP_DIR}
