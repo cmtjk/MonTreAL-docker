@@ -13,7 +13,7 @@ env:
     matrix:
         - ARCH=-amd64 DOTARCH=.amd64
         - ARCH=-arm DOTARCH=.arm
-before_install:
+before_script: 
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then VERSION=latest; else VERSION=develop; fi; export VERSION;
   - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
-before_script: if [ "$TRAVIS_BRANCH" = "master" ]; then VERSION=latest; else VERSION=develop; fi; export VERSION;
 script: echo $VERSION
