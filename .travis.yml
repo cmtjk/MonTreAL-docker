@@ -2,6 +2,9 @@ sudo: required
 services:
     - docker
 language: bash
+branches:
+  only:
+    - master
 env:
     global:
         - NAME=montreal
