@@ -2,14 +2,18 @@ sudo: required
 services:
     - docker
 language: bash
+branches:
+  only:
+    - master
+    - develop
 env:
     global:
         - NAME=montreal
         - REPO_URL="https://github.com/r3r57/MonTreAL.git"
-        - VERSION=latest
     matrix:
         - ARCH=-amd64 DOTARCH=.amd64
         - ARCH=-arm DOTARCH=.arm
 before_install:
   - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
-script: make
+before_script: if [ "$TRAVIS_BRANCH" = "master" ]; then VERSION=latest; else VERSION=develop; fi; export VERSION;
+script: echo $VERSION
