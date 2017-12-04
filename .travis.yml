@@ -16,3 +16,8 @@ env:
 before_install:
   - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
 script: make
+
+jobs:
+  include:
+    - stages Make Manifest
+      script: make manifest
