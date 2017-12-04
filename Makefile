@@ -22,6 +22,7 @@ build: fetch
 	docker build --pull --cache-from ${DOCKER_USER}/${NAME}:${VERSION}${ARCH} --build-arg VCS_URL=${REPO_URL} --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=${TRAVIS_COMMIT} --build-arg VERSION=${VERSION} -t "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}" -f ${TMP_DIR}/Dockerfile${DOTARCH} ${TMP_DIR}
 
 push: build
+	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	docker push "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
 
 manifest:
