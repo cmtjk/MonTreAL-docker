@@ -9,7 +9,7 @@
 #	DOCKER_REPO - the docker repository
 
 default: all
-all: push
+all: manifest
 
 TMP_DIR:=/tmp/${NAME}
 
@@ -24,6 +24,11 @@ build: fetch
 push: build
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	docker push "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
+
+manifest: push
+	wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64
+	chmod +x manifest-tool-linux-amd64
+	./manifest-tool-linux-amd64 push from-spec manifests/${VERSION}-multiarch.yml
 
 clean:
 	rm -rf ${TMP_DIR}

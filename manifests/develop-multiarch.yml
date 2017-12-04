@@ -1,0 +1,11 @@
+image: r3r57/montreal:develop-multiarch
+manifests:
+  - image: r3r57/montreal:develop-amd64
+    platform:
+      architecture: amd64
+      os: linux
+  - image: r3r57/montreal:develop-arm
+    platform:
+      architecture: arm
+      os: linux
+
