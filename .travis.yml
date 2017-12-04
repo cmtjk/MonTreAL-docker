@@ -19,5 +19,5 @@ script: make
 
 jobs:
   include:
-    - stages Make Manifest
+    - stage: Make Manifest
       script: make manifest
