@@ -35,15 +35,20 @@ env:
     - NAME=montreal
     - REPO_URL="https://github.com/r3r57/MonTreAL.git"
     - VERSION=latest
-  matrix:
-    - ARCH=-amd64 DOTARCH=.amd64
-    - ARCH=-arm DOTARCH=.arm
 
 jobs:
   include:
     - stage: Build images
       before_install:
         - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
+      env:
+        - ARCH=-amd64 DOTARCH=.amd64
+      script: make
+      before_install:
+        - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
+      env:
+        - ARCH=-arm DOTARCH=.arm
       script: make
     - stage: Make manifest
+      env:
       script: make manifest
