@@ -1,3 +1,28 @@
+# sudo: required
+# services:
+#     - docker
+# language: bash
+# branches:
+#   only:
+#     - master
+# env:
+#     global:
+#         - NAME=montreal
+#         - REPO_URL="https://github.com/r3r57/MonTreAL.git"
+#         - VERSION=latest
+#     matrix:
+#         - ARCH=-amd64 DOTARCH=.amd64
+#         - ARCH=-arm DOTARCH=.arm
+# before_install:
+#   - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
+# script: make
+
+# jobs:
+#   include:
+#     - stage: Make Manifest
+#       script: make manifest
+
+
 sudo: required
 services:
     - docker
@@ -5,19 +30,20 @@ language: bash
 branches:
   only:
     - master
-env:
-    global:
-        - NAME=montreal
-        - REPO_URL="https://github.com/r3r57/MonTreAL.git"
-        - VERSION=latest
-    matrix:
-        - ARCH=-amd64 DOTARCH=.amd64
-        - ARCH=-arm DOTARCH=.arm
-before_install:
-  - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
-script: make
 
 jobs:
   include:
-    - stage: Make Manifest
+    - stage: Build images
+      env:
+        global:
+          - NAME=montreal
+          - REPO_URL="https://github.com/r3r57/MonTreAL.git"
+          - VERSION=latest
+        matrix:
+          - ARCH=-amd64 DOTARCH=.amd64
+          - ARCH=-arm DOTARCH=.arm
+      before_install:
+        - docker pull "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
+      script: make
+    - stage: Make manifest
       script: make manifest
