@@ -28,7 +28,7 @@ jobs:
         - VERSION=latest
         - BRANCH=master
       script: make
-    - stage: Make manifests
+    - stage: Make manifest (latest)
       env: VERSION=latest
       script: make manifest
     - stage: Build images (develop)
@@ -47,6 +47,6 @@ jobs:
         - VERSION=develop
         - BRANCH=develop
       script: make
-    - stage: Make manifests
+    - stage: Make manifest (develop)
       env: VERSION=develop
       script: make manifest
