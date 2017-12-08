@@ -15,16 +15,16 @@ TMP_DIR:=/tmp/builder
 clone:
 	git clone ${REPO_URL} ${TMP_DIR}
 
-build: check_build_env clone
+build:
 	docker run --rm --privileged multiarch/qemu-user-static:register --reset
 	curl -sL https://github.com/multiarch/qemu-user-static/releases/download/v2.9.1/qemu-arm-static.tar.gz | tar -xzC ${TMP_DIR}
 	docker build --pull --cache-from ${DOCKER_USER}/${NAME}:${VERSION}-${ARCH} --build-arg VCS_URL=${REPO_URL} --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=${TRAVIS_COMMIT} --build-arg VERSION=${VERSION} -t "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}" -f ${TMP_DIR}/Dockerfile.${ARCH} ${TMP_DIR}
 
-push: check_docker_env
+push:
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	docker push "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
 
-manifest: check_docker_env
+manifest:
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64
 	chmod +x manifest-tool-linux-amd64
