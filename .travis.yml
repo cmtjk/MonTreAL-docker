@@ -31,7 +31,7 @@ jobs:
     - stage: Make manifests
       env: VERSION=latest
       script: make manifest
-    - Build images (develop)
+    - stage: Build images (develop)
       before_install:
         - docker pull "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
       env:
