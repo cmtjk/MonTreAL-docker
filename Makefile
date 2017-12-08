@@ -7,29 +7,45 @@
 #	DOCKER_USER - the docker username
 #	DOCKER_PASS - the docker password
 #	DOCKER_REPO - the docker repository
-
 default: all
 all: push
 
-TMP_DIR:=/tmp/${NAME}
+TMP_DIR:=/tmp/builder
 
-fetch: clean
+clone:
 	git clone ${REPO_URL} ${TMP_DIR}
 
-build: fetch
+build: check_build_env clone
 	docker run --rm --privileged multiarch/qemu-user-static:register --reset
 	curl -sL https://github.com/multiarch/qemu-user-static/releases/download/v2.9.1/qemu-arm-static.tar.gz | tar -xzC ${TMP_DIR}
 	docker build --pull --cache-from ${DOCKER_USER}/${NAME}:${VERSION}${ARCH} --build-arg VCS_URL=${REPO_URL} --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` --build-arg VCS_REF=${TRAVIS_COMMIT} --build-arg VERSION=${VERSION} -t "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}" -f ${TMP_DIR}/Dockerfile${DOTARCH} ${TMP_DIR}
 
-push: build
+push: check_docker_env
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	docker push "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
 
-manifest:
+manifest: check_docker_env
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
 	wget https://github.com/estesp/manifest-tool/releases/download/v0.7.0/manifest-tool-linux-amd64
 	chmod +x manifest-tool-linux-amd64
 	./manifest-tool-linux-amd64 push from-spec manifests/${VERSION}-multiarch.yml
 
+check_build_env:
+	$(call check_env,NAME)
+	$(call check_env,REPO_URL)
+	$(call check_env,ARCH)
+	$(call check_env,DOTARCH)
+	$(call check_env,VERSION)
+
+check_docker_env:
+	$(call check_env,DOCKER_USER)
+	$(call check_env,DOCKER_PASS)
+
 clean:
 	rm -rf ${TMP_DIR}
+
+define check_env
+	ifndef ${1}
+		$(error ${1} not defined)
+	endif
+endef
