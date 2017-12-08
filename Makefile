@@ -22,7 +22,7 @@ build: check_build_env clone
 
 push: check_docker_env
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
-	docker push "${DOCKER_USER}/${NAME}:${VERSION}${ARCH}"
+	docker push "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
 
 manifest: check_docker_env
 	docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${DOCKER_REPO}
