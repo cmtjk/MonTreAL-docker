@@ -9,22 +9,44 @@ env:
   global:
     - NAME=montreal
     - REPO_URL="https://github.com/r3r57/MonTreAL.git"
-    - VERSION=latest
 
 jobs:
   include:
-    - stage: Build images
+    - stage: Build images (latest)
       before_install:
         - docker pull "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
       env:
         - ARCH=amd64
+        - VERSION=latest
+        - BRANCH=master
       script: make
     -
       before_install:
         - docker pull "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
       env:
         - ARCH=arm
+        - VERSION=latest
+        - BRANCH=master
       script: make
-    - stage: Make manifest
+    - stage: Make manifests
+      env: VERSION=latest
+      script: make manifest
+    - Build images (develop)
+      before_install:
+        - docker pull "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
       env:
+        - ARCH=amd64
+        - VERSION=develop
+        - BRANCH=develop
+      script: make
+    -
+      before_install:
+        - docker pull "${DOCKER_USER}/${NAME}:${VERSION}-${ARCH}"
+      env:
+        - ARCH=arm
+        - VERSION=develop
+        - BRANCH=develop
+      script: make
+    - stage: Make manifests
+      env: VERSION=develop
       script: make manifest

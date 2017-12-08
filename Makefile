@@ -14,6 +14,7 @@ TMP_DIR:=/tmp/builder
 
 clone:
 	git clone ${REPO_URL} ${TMP_DIR}
+	git checkout ${BRANCH}
 
 build: clone
 	docker run --rm --privileged multiarch/qemu-user-static:register --reset
